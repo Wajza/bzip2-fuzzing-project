@@ -1,0 +1,6 @@
+# environment variables:
+AFL_CUSTOM_INFO_PROGRAM=./bzip2_fuzzer
+AFL_CUSTOM_INFO_PROGRAM_ARGV=-d -c @@
+AFL_CUSTOM_INFO_OUT=outdec/default
+# command line:
+'afl-fuzz' '-i' 'in_dec' '-o' 'outdec' '--' './bzip2_fuzzer' '-d' '-c' '@@'
