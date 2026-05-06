@@ -1,11 +1,11 @@
 # bzip2-fuzzing-project
 
 ## Call Graph (CG)
-![Alt Text](Call Graph and Control Flow Graph Generation/Call Graph/bzip2_callgraph.png)
+[Call Graph and Control Flow Graph Generation](/Call%20Graph%20and%20Control%20Flow%20Graph%20Generation/Call%20Graph/bzip2_callgraph.png)
 
 ## Control Flow Graph (CFG)
 ### BZ2_bzWrite
-![Alt Text](Call Graph and Control Flow Graph Generation/Control Flow Graph/BZ2_bzWrite/BZ2_bzWrite_cfg.png)
+[Call Graph and Control Flow Graph Generation](/Call%20Graph%20and%20Control%20Flow%20Graph%20Generation/Control%20Flow%20Graph/BZ2_bzWrite/BZ2_bzWrite_cfg.png)
 
 ### uncompressStream
-![Alt Text](Call Graph and Control Flow Graph Generation/Control Flow Graph/uncompressStream/uncompressStream_cfg.png)
+[Call Graph and Control Flow Graph Generation](/Call%20Graph%20and%20Control%20Flow%20Graph%20Generation/Control%20Flow%20Graph/uncompressStream/uncompressStream_cfg.png)
