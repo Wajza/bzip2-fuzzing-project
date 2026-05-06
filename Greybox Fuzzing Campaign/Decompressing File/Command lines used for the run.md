@@ -136,7 +136,6 @@ AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
 | Target Program | `./bzip2_fuzzer` | The compiled fuzzing harness for bzip2 |
 | Target Arguments | `-d -c @@` | Decompress (`-d`), write to stdout (`-c`), `@@` replaced with fuzzed input file path |
 
-
 ### Target Program Arguments
 ```
 ./bzip2_fuzzer

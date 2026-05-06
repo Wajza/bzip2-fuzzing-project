@@ -29,7 +29,6 @@ AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
 | Mode | `-d` | Quick & dirty mode (skips deterministic fuzzing for speed) |
 | Target | `./bzip2_fuzzer` | Target program to fuzz (receives fuzzed inputs) |
 
-
 ### Target Program Arguments
 ```
 ./bzip2_fuzzer
