@@ -1,30 +1,3 @@
-we missed photos for AFL++
-
-Command line used to find this crash:
-
-afl-fuzz -i in_dec -o outdec -- ./bzip2_fuzzer -d -c @@
-
-If you can't reproduce a bug outside of afl-fuzz, be sure to set the same
-memory limit. The limit used for this fuzzing session was 0 B.
-
-Need a tool to minimize test cases before investigating the crashes or sending
-them to a vendor? Check out the afl-tmin that comes with the fuzzer!
-
-Found any cool bugs in open-source tools using afl-fuzz? If yes, please post
-to https://github.com/AFLplusplus/AFLplusplus/issues/286 once the issues
- are fixed :)
-
- ./bzip2_fuzzer
--d
--c
-@@
-
-# environment variables:
-AFL_CUSTOM_INFO_PROGRAM=./bzip2_fuzzer
-AFL_CUSTOM_INFO_PROGRAM_ARGV=-d -c @@
-AFL_CUSTOM_INFO_OUT=outdec/default
-# command line:
-'afl-fuzz' '-i' 'in_dec' '-o' 'outdec' '--' './bzip2_fuzzer' '-d' '-c' '@@'
 
 
 # AFL++ Decompressing Fuzzing — All Commands
@@ -129,4 +102,54 @@ ls outdec/default/hangs/ | wc -l
 ```bash
 AFL_NO_UI=1 afl-fuzz -i in_dec -o outdec -S secondary1 -- ./bzip2_fuzzer -d -c @@
 ```
+
+
+
+
+## AFL++ Fuzzing Configuration
+
+### Environment Variables
+```
+AFL_CUSTOM_INFO_PROGRAM=./bzip2_fuzzer
+AFL_CUSTOM_INFO_PROGRAM_ARGV=-cfk @@
+AFL_CUSTOM_INFO_OUT=out_compress_small/default
+AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
+```
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `AFL_CUSTOM_INFO_PROGRAM` | `./bzip2_fuzzer` | Specifies the target program for fuzzing (custom fuzzing harness for bzip2) |
+| `AFL_CUSTOM_INFO_PROGRAM_ARGV` | `-d -c @@` | Arguments passed to the target: `-d` (decompress), `-c` (write to stdout), `@@` (placeholder for fuzzed input file path) |
+| `AFL_CUSTOM_INFO_OUT` | `outdec/default` | Directory for custom results/logs (separate from AFL's main output directory) |
+
+----------------------------------------------------------------------------------------
+
+### Execution Flow
+```
+'afl-fuzz' '-i' 'in_dec' '-o' 'outdec' '--' './bzip2_fuzzer' '-d' '-c' '@@'
+```
+| Component | Value | Description |
+|-----------|-------|-------------|
+| Fuzzer | `afl-fuzz` | American Fuzzy Lop fuzzer executable |
+| Input Directory | `-i in_dec` | Directory containing seed inputs for fuzzing (decompression seeds) |
+| Output Directory | `-o outdec` | Directory for results (queue, crashes, hangs, etc.) |
+| Separator | `--` | Marks the end of AFL options and start of target program + arguments |
+| Target Program | `./bzip2_fuzzer` | The compiled fuzzing harness for bzip2 |
+| Target Arguments | `-d -c @@` | Decompress (`-d`), write to stdout (`-c`), `@@` replaced with fuzzed input file path |
+
+
+### Target Program Arguments
+```
+./bzip2_fuzzer
+-d
+-c
+@@
+```
+| Argument | Purpose |
+|----------|---------|
+| `./bzip2_fuzzer` | The compiled fuzzing harness for bzip2 |
+| `-d` | Decompress mode - tests bzip2's decompression logic |
+| `-c` | Write output to stdout (don't create output files, prevents disk clutter) |
+| `@@` | Placeholder replaced by AFL++ with the actual fuzzed input file path |
+
+----------------------------------------------------------------------------------------
 

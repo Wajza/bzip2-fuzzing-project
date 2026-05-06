@@ -16,8 +16,6 @@ AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
 
 ----------------------------------------------------------------------------------------
 
-## Command Lines
-
 ### Execution Flow
 ```
 'afl-fuzz' '-i' 'in_compress_small' '-o' 'out_compress_small' '-m' '50' '-d' './bzip2_fuzzer
