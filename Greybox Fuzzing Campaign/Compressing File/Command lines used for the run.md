@@ -1,152 +1,45 @@
-# environment variables:
-AFL_CUSTOM_INFO_PROGRAM=./bzip2_fuzzer
-AFL_CUSTOM_INFO_PROGRAM_ARGV=-dfk @@
-AFL_CUSTOM_INFO_OUT=out_new/default
-# command line:
-'afl-fuzz' '-m' '50' '-i' 'in' '-o' 'out_new' '-d' './bzip2_fuzzer' '-dfk' '@@'
+## AFL++ Fuzzing Configuration
 
-./bzip2_fuzzer
--dfk
-@@
-
-Command line used to find this crash:
-
-afl-fuzz -m 50 -i in -o out_new -d ./bzip2_fuzzer -dfk @@
-
-If you can't reproduce a bug outside of afl-fuzz, be sure to set the same
-memory limit. The limit used for this fuzzing session was 50.0 MB.
-
-Need a tool to minimize test cases before investigating the crashes or sending
-them to a vendor? Check out the afl-tmin that comes with the fuzzer!
-
-Found any cool bugs in open-source tools using afl-fuzz? If yes, please post
-to AFLplusplus/AFLplusplus#286 once the issues
- are fixed :)
-
- # environment variables:
-AFL_CUSTOM_INFO_PROGRAM=./bzip2_afl
-AFL_CUSTOM_INFO_PROGRAM_ARGV=-z @@
-AFL_CUSTOM_INFO_OUT=out/default
-# command line:
-'afl-fuzz' '-i' '-' '-o' 'out' '-m' 'none' '--' './bzip2_afl' '-z' '@@'
-
-./bzip2_afl
--z
-@@
-
-Command line used to find this crash:
-
-afl-fuzz -i - -o out -m none -- ./bzip2_afl -z @@
-
-If you can't reproduce a bug outside of afl-fuzz, be sure to set the same
-memory limit. The limit used for this fuzzing session was 0 B.
-
-Need a tool to minimize test cases before investigating the crashes or sending
-them to a vendor? Check out the afl-tmin that comes with the fuzzer!
-
-Found any cool bugs in open-source tools using afl-fuzz? If yes, please post
-to AFLplusplus/AFLplusplus#286 once the issues
- are fixed :)
-
-Command line used to find this crash:
-
-afl-fuzz -i in -o out -m none -- ./bzip2_afl -dfk @@
-
-If you can't reproduce a bug outside of afl-fuzz, be sure to set the same
-memory limit. The limit used for this fuzzing session was 0 B.
-
-Need a tool to minimize test cases before investigating the crashes or sending
-them to a vendor? Check out the afl-tmin that comes with the fuzzer!
-
-Found any cool bugs in open-source tools using afl-fuzz? If yes, please post
-to AFLplusplus/AFLplusplus#286 once the issues
- are fixed :)
-
- # environment variables:
+### Environment Variables
+```
 AFL_CUSTOM_INFO_PROGRAM=./bzip2_fuzzer
 AFL_CUSTOM_INFO_PROGRAM_ARGV=-cfk @@
 AFL_CUSTOM_INFO_OUT=out_compress_small/default
 AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
-# command line:
-'afl-fuzz' '-i' 'in_compress_small' '-o' 'out_compress_small' '-m' '50' '-d' './bzip2_fuzzer' '-cfk' '@@'
+```
+| Variable | Value | Description |
+|----------|-------|-------------|
+| `AFL_CUSTOM_INFO_PROGRAM` | `./bzip2_fuzzer` | Specifies the target program for fuzzing (custom fuzzing harness for bzip2) |
+| `AFL_CUSTOM_INFO_PROGRAM_ARGV` | `-cfk @@` | Arguments passed to the target: `-c` (compress), `-f` (force overwrite), `-k` (keep input file), `@@` (placeholder for fuzzed input file path) |
+| `AFL_CUSTOM_INFO_OUT` | `out_compress_small/default` | Directory for custom results/logs (separate from AFL's main output directory) |
+| `AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES` | `1` | Suppresses AFL's warning when target doesn't crash on any input |
 
+----------------------------------------------------------------------------------------
+
+## Command Lines
+
+### Execution Flow
+```
+'afl-fuzz' '-i' 'in_compress_small' '-o' 'out_compress_small' '-m' '50' '-d' './bzip2_fuzzer
+```
+| Component | Value | Description |
+|-----------|-------|-------------|
+| Fuzzer | `afl-fuzz` | American Fuzzy Lop fuzzer executable |
+| Input Directory | `-i in_compress_small` | Directory containing seed inputs for fuzzing |
+| Output Directory | `-o out_compress_small` | Directory for results (queue, crashes, hangs, etc.) |
+| Memory Limit | `-m 50` | Limits child process memory to 50 MB |
+| Mode | `-d` | Quick & dirty mode (skips deterministic fuzzing for speed) |
+| Target | `./bzip2_fuzzer` | Target program to fuzz (receives fuzzed inputs) |
+
+
+### Target Program Arguments
+```
 ./bzip2_fuzzer
 -cfk
 @@
-
-# environment variables:
-AFL_CUSTOM_INFO_PROGRAM=./bzip2_fuzzer
-AFL_CUSTOM_INFO_PROGRAM_ARGV=-cfk @@
-AFL_CUSTOM_INFO_OUT=out_compress/default
-AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
-# command line:
-'afl-fuzz' '-i' 'in_compress' '-o' 'out_compress' '-m' '50' '-d' './bzip2_fuzzer' '-cfk' '@@'
-
-./bzip2_fuzzer
--cfk
-@@
-
-# environment variables:
-AFL_CUSTOM_INFO_PROGRAM=./bzip2_afl
-AFL_CUSTOM_INFO_PROGRAM_ARGV=-z @@
-AFL_CUSTOM_INFO_OUT=out/default
-# command line:
-'afl-fuzz' '-i' 'in' '-o' 'out' '-m' 'none' '--' './bzip2_afl' '-z' '@@'
-
-./bzip2_afl
--z
-@@
-
-genhtml coverage.info --output-directory cov_report
-
-
-
-
-
-wget https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
-tar -xf bzip2-1.0.8.tar.gz && cd bzip2-1.0.8
-CC=afl-clang-fast make
-cp bzip2 ../bzip2_fuzzer
-cd ..
-
-
-cd bzip2-1.0.8
-CC=gcc CFLAGS="-fprofile-arcs -ftest-coverage" make clean all
-cp bzip2 ../bzip2_cov
-cd ..
-
-
-mkdir in_compress_small
-echo "test1" > in_compress_small/s1.txt
-echo "hello" > in_compress_small/s2.txt
-echo "12345" > in_compress_small/s3.txt
-echo "abcde" > in_compress_small/s4.txt
-echo "fuzz!" > in_compress_small/s5.txt
-echo "kfupm" > in_compress_small/s6.txt
-
-
-export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1
-
-afl-fuzz \
-  -i in_compress_small \
-  -o out_compress_small \
-  -m 50 \
-  -d \
-  ./bzip2_fuzzer -cfk @@
-
-
-  afl-cov \
-  -d out_compress_small/default \
-  --coverage-cmd "./bzip2_cov -d AFL_FILE" \
-  --code-dir . \
-  --afl-file AFL_FILE \
-  --overwrite \
-  --ignore-core-pattern
-
-
-  lcov \
-  --capture \
-  --directory . \
-  --output-file coverage.info
-
-  genhtml coverage.info --output-directory cov_report
+```
+| Argument | Purpose |
+|----------|---------|
+| `./bzip2_fuzzer` | The compiled fuzzing harness for bzip2 |
+| `-cfk` | bzip2 flags: `-c` (compress to stdout), `-f` (force overwrite), `-k` (keep input file) |
+| `@@` | Placeholder replaced by AFL++ with the actual fuzzed input file path |
