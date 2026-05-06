@@ -46,9 +46,10 @@
 ---
 ## Source-Based Coverage
 ### Compressing File
-[Source-Based Coverage]()
+[Source-Based Coverage](/Source-Based%20Coverage/Compressing%20File)
+
 ### Decompressing File
-[Source-Based Coverage]()
+[Source-Based Coverage](/Source-Based%20Coverage/Decompressing%20File)
 
 ---
 ## Coverage Mapping & Analysis
